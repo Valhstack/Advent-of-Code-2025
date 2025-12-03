@@ -29,9 +29,6 @@ fetchInput().then(input => {
 
                 dial = temp1;
             }
-            else if (temp === 100) {
-                dial = 0;
-            }
             else {
                 dial += Number(dialValue);
             }
@@ -51,9 +48,6 @@ fetchInput().then(input => {
 
                 dial -= temp1;
                 dial = 99 - temp2;
-            }
-            else if (temp === 100) {
-                dial = 0;
             }
             else {
                 dial -= Number(dialValue);
