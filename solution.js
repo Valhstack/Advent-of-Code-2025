@@ -12,7 +12,7 @@ async function fetchInput() {
 fetchInput().then(input => {
     // main logic here
 
-    let regex = /[A-Za-z]\d{1,2}/g;
+    let regex = /[A-Za-z]\d+/g;
 
     let matches = input.match(regex);
 
