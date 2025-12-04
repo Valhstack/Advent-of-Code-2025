@@ -22,7 +22,7 @@ fetchInput().then(input => {
         if (match.includes("R")) {
             dialValue = match.replace("R", "");
             
-            if (Number(dialValue) > 100) Number(dialValue) = Number(dialValue) % 100;
+            if (Number(dialValue) > 100) dialValue = Number(dialValue) % 100;
 
             temp += Number(dialValue);
 
@@ -44,7 +44,7 @@ fetchInput().then(input => {
         else {
             dialValue = match.replace("L", "");
             
-            if (Number(dialValue) > 100) Number(dialValue) = Number(dialValue) % 100;
+            if (Number(dialValue) > 100) dialValue = Number(dialValue) % 100;
 
             temp -= Number(dialValue);
 
