@@ -37,7 +37,7 @@ fetchInput().then(input => {
 
                 dial = temp1;
 
-                password++; // part of resolution of second part of the challenge
+                if(dial !== 0) password++; // part of resolution of second part of the challenge
             }
             else {
                 dial += Number(dialValue);
@@ -67,7 +67,7 @@ fetchInput().then(input => {
                 dial -= temp1;
                 dial = 99 - temp2;
 
-                password++; // part of resolution of second part of the challenge
+                if(dial !== 0) password++; // part of resolution of second part of the challenge
             }
             else {
                 dial -= Number(dialValue);
