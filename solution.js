@@ -35,7 +35,7 @@ fetchInput().then(input => {
                 let temp1 = 100 - temp;
                 if (temp1 < 0) temp1 *= -1;
 
-                if (temp1 !== 0) password++; // part of resolution of second part of the challenge
+                if (temp1 !== 0 && dial !== 0) password++; // part of resolution of second part of the challenge
 
                 dial = temp1;
             }
@@ -64,10 +64,13 @@ fetchInput().then(input => {
                 let temp1 = (0 - dial) * -1;
                 let temp2 = dialValue - temp1 - 1;
 
-                dial -= temp1;
-                dial = 99 - temp2;
+                let temp3;
+                temp3 -= temp1
+                temp3 = 99 - temp2;
 
-                if (dial !== 0) password++; // part of resolution of second part of the challenge
+                if (dial !== 0 && temp3 !== 0) password++; // part of resolution of second part of the challenge
+
+                dial = temp3;
             }
             else {
                 dial -= Number(dialValue);
@@ -83,3 +86,5 @@ fetchInput().then(input => {
 
     console.log("Password: ", password);
 })
+
+// issue with overcounting is still present
