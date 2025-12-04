@@ -2,7 +2,7 @@ const input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522
 
 let result = 0;
 
-const rgx = /^(\d+)\1+$/g;
+const rgx = /^(\d+)\1$/g;
 
 console.log(input);
 
