@@ -9,7 +9,7 @@ console.log(input);
 for(let inpt of input){
     let ranges = inpt.split("-");
 
-    for(let i = Number(ranges[0]); i < Number(ranges[1]); i++){
+    for(let i = Number(ranges[0]); i <= Number(ranges[1]); i++){
         if(rgx.test(i.toString())){
             result += Number(i);
         }
