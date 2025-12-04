@@ -2,7 +2,7 @@ const input = "9226466333-9226692707,55432-96230,4151-6365,686836-836582,519296-
 
 let result = 0;
 
-const rgx = /^(\d+)\1$/g;
+const rgx = /^(\d+)\1+$/g; // "\1" resolves first part of the task, "\1+" resolves second part of the task
 
 console.log(input);
 
