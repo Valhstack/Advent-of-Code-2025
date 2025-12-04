@@ -35,7 +35,7 @@ fetchInput().then(input => {
                 let temp1 = 100 - temp;
                 if (temp1 < 0) temp1 *= -1;
 
-                if (dial !== 0) password++; // part of resolution of second part of the challenge
+                if (temp1 !== 0) password++; // part of resolution of second part of the challenge
 
                 dial = temp1;
             }
@@ -64,10 +64,10 @@ fetchInput().then(input => {
                 let temp1 = (0 - dial) * -1;
                 let temp2 = dialValue - temp1 - 1;
 
-                if (dial !== 0) password++; // part of resolution of second part of the challenge
-
                 dial -= temp1;
                 dial = 99 - temp2;
+
+                if (dial !== 0) password++; // part of resolution of second part of the challenge
             }
             else {
                 dial -= Number(dialValue);
