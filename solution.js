@@ -21,6 +21,9 @@ fetchInput().then(input => {
     for (let match of matches) {
         if (match.includes("R")) {
             dialValue = match.replace("R", "");
+            
+            if (Number(dialValue) > 100) Number(dialValue) = Number(dialValue) % 100;
+
             temp += Number(dialValue);
 
             if (temp > 99) {
@@ -40,6 +43,9 @@ fetchInput().then(input => {
         }
         else {
             dialValue = match.replace("L", "");
+            
+            if (Number(dialValue) > 100) Number(dialValue) = Number(dialValue) % 100;
+
             temp -= Number(dialValue);
 
             if (temp < 0) {
@@ -61,5 +67,5 @@ fetchInput().then(input => {
         }
     }
 
-    console.log("Password: ",password);
+    console.log("Password: ", password);
 })
