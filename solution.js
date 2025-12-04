@@ -25,7 +25,11 @@ fetchLines().then(lines => {
             }
         }
 
-        voltageLine = max1.toString() + max2.toString();
+        for(let ch of line){
+            if(Number(ch) === max1 || Number(ch) === max2){
+                voltageLine += ch;
+            }
+        }
 
         voltageTotal += Number(voltageLine);
     }
