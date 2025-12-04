@@ -32,6 +32,7 @@ fetchLines().then(lines => {
         }
 
         voltageTotal += Number(voltageLine);
+        voltageLine = "";
     }
 
     console.log("Total output voltage: ", voltageTotal);
