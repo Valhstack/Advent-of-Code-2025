@@ -21,8 +21,13 @@ fetchInput().then(input => {
     for (let match of matches) {
         if (match.includes("R")) {
             dialValue = match.replace("R", "");
-            
-            if (Number(dialValue) > 100) dialValue = Number(dialValue) % 100;
+
+            if (Number(dialValue) > 100) {
+                let hundreds = Math.floor(Number(dialValue) / 100); // part of resolution of second part of the challenge
+                password += hundreds;
+
+                dialValue = Number(dialValue) % 100;
+            }
 
             temp += Number(dialValue);
 
@@ -31,6 +36,8 @@ fetchInput().then(input => {
                 if (temp1 < 0) temp1 *= -1;
 
                 dial = temp1;
+
+                password++; // part of resolution of second part of the challenge
             }
             else {
                 dial += Number(dialValue);
@@ -43,8 +50,13 @@ fetchInput().then(input => {
         }
         else {
             dialValue = match.replace("L", "");
-            
-            if (Number(dialValue) > 100) dialValue = Number(dialValue) % 100;
+
+            if (Number(dialValue) > 100) {
+                let hundreds = Math.floor(Number(dialValue) / 100); // part of resolution of second part of the challenge
+                password += hundreds;
+
+                dialValue = Number(dialValue) % 100;
+            }
 
             temp -= Number(dialValue);
 
@@ -54,6 +66,8 @@ fetchInput().then(input => {
 
                 dial -= temp1;
                 dial = 99 - temp2;
+
+                password++; // part of resolution of second part of the challenge
             }
             else {
                 dial -= Number(dialValue);
