@@ -10,7 +10,7 @@ async function fetchLines() {
 }
 
 fetchLines().then(lines => {
-    let voltageLine, voltageTotal = 0;
+    let voltageLine = "", voltageTotal = 0;
 
     for(let line of lines){
         let max1 = Number(line[0]), max2 = Number(line[1]);
