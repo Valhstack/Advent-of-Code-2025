@@ -46,11 +46,10 @@ fetchLines().then(lines => {
                     lines[i][j] = ".";
                 }
             }
-
-            console.log(lines);
         }
 
         totalAccessible += accessible;
+        console.log(lines);
     }
 
     console.log(lines);
