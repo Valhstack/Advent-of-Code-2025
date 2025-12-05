@@ -43,7 +43,7 @@ fetchLines().then(lines => {
             for (let j = 0; j < columns; j++) {
                 if (lines[i][j] === "@" && countNeighbours(i, j, lines) < 4) {
                     accessible++;
-                    lines[i][j] === ".";
+                    lines[i][j] = ".";
                 }
             }
 
