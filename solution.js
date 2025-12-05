@@ -21,13 +21,13 @@ fetchLines().then(lines => {
 
         console.log(arr);
 
-        let max = Math.max(...arr.slice(1, arr.length - 1));
+        let max = Math.max(...arr.slice(1, arr.length));
 
         voltageLine = arr[0].toString() + max.toString();
         let temp1 = "";
 
         for (let i = 1; i < arr.length - 1; i++) {
-            max = Math.max(...arr.slice(i + 1, length - 1));
+            max = Math.max(...arr.slice(i + 1, arr.length));
             temp1 = arr[i].toString() + max.toString();
 
             if (Number(temp1) > Number(voltageLine)) {
