@@ -46,6 +46,8 @@ fetchLines().then(lines => {
                     lines[i][j] === ".";
                 }
             }
+
+            console.log(lines);
         }
 
         totalAccessible += accessible;
