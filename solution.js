@@ -19,6 +19,7 @@ fetchLines().then(lines => {
             if(Number(line[i]) > max1){
                 max2 = max1;
                 max1 = Number(line[i]);
+                max2 = Number(line[i + 1]);
             }
             else if(Number(line[i]) > max2){
                 max2 = Number(line[i]);
