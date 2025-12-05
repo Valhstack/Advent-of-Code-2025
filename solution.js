@@ -21,6 +21,8 @@ fetchLines().then(lines => {
 
         console.log(arr);
 
+        if(arr.length === 0) continue;
+
         let max = Math.max(...arr.slice(1, arr.length));
 
         voltageLine = arr[0].toString() + max.toString();
