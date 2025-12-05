@@ -21,9 +21,11 @@ fetchLines().then(lines => {
 
         console.log(arr);
 
-        if(arr.length === 0) continue;
+        if (arr.length === 0) continue;
 
-        let max = Math.max(...arr.slice(1, arr.length));
+        // Solution for Part 1
+
+        /*let max = Math.max(...arr.slice(1, arr.length));
 
         voltageLine = arr[0].toString() + max.toString();
         let temp1 = "";
@@ -37,6 +39,26 @@ fetchLines().then(lines => {
             }
 
             temp1 = "";
+        }*/
+
+        // Solution for Part 2
+
+        let needed = 12;
+        let start = 0;
+        let voltageLine = "";
+
+        while (needed > 0) {
+            let end = arr.length - needed;      // inclusive
+
+            let window = arr.slice(start, end + 1);
+            let max = Math.max(...window);
+
+            voltageLine += max;
+
+            let indx = start + window.indexOf(max);
+
+            start = indx + 1;
+            needed--;
         }
 
         voltageTotal += Number(voltageLine);
