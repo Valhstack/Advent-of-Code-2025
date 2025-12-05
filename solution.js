@@ -36,6 +36,8 @@ fetchLines().then(lines => {
 
     let totalAccessible = 0, accessible = 1;
 
+    lines = lines.map(line => line.split(""));
+
     while (accessible != 0) {
         accessible = 0;
 
