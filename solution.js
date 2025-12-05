@@ -34,7 +34,7 @@ fetchLines().then(lines => {
     let rows = lines.length;
     let columns = lines[0].length;
 
-    let totalAaccessible = 0, accessible = 1;
+    let totalAccessible = 0, accessible = 1;
 
     while (accessible != 0) {
         accessible = 0;
@@ -47,8 +47,10 @@ fetchLines().then(lines => {
                 }
             }
         }
+
+        totalAccessible += accessible;
     }
 
     console.log(lines);
-    console.log(accessible);
+    console.log(totalAccessible);
 })
