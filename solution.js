@@ -30,7 +30,7 @@ fetchLines().then(lines => {
             max = Math.max(...arr.slice(i + 1, length - 1));
             temp1 = arr[i].toString() + max.toString();
 
-            if (temp1 > voltageLine) {
+            if (Number(temp1) > Number(voltageLine)) {
                 voltageLine = temp1;
             }
 
