@@ -37,17 +37,30 @@ fetchLines().then(lines => {
     }*/
 
     // Part 2 solution
+    const bigRanges = ranges.map(r => r.split("-").map(BigInt));
 
-    for (let range of ranges) {
-        range = range.split("-");
-        console.log(range);
+    bigRanges.sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
 
-        for (let i = Number(range[0]); i <= Number(range[1]); i++) {
-            allIds.push(i);
+    let merged = [];
+    for (let [start, end] of bigRanges) {
+        if (merged.length === 0) {
+            merged.push([start, end]);
+        } else {
+            let last = merged[merged.length - 1];
+            if (start <= last[1] + 1n) {
+                // Overlapping or contiguous, merge them
+                last[1] = last[1] > end ? last[1] : end;
+            } else {
+                merged.push([start, end]);
+            }
         }
     }
 
-    let allUniqueIDs = [...new Set(allIds)];
+    // Count unique IDs
+    let totalCount = 0n;
+    for (let [start, end] of merged) {
+        totalCount += end - start + 1n;
+    }
 
-    console.log("Total count: ", allUniqueIDs.length);
+    console.log("Total count: ", totalCount);
 })
