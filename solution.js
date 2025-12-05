@@ -38,8 +38,11 @@ fetchLines().then(lines => {
 
     // Part 2 solution
 
-    for(let range of ranges){
-        for(let i = Number(range[0]); i <= Number(range[1]); i++){
+    for (let range of ranges) {
+        range = range.split("-");
+        console.log(range);
+
+        for (let i = Number(range[0]); i <= Number(range[1]); i++) {
             allIds.push(i);
         }
     }
