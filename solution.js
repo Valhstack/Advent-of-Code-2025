@@ -26,7 +26,7 @@ fetchLines().then(lines => {
             range = range.split("-");
             console.log(range)
 
-            if (ingredient >= range[0] && ingredient <= range[1]) {
+            if (Number(ingredient) >= Number(range[0]) && Number(ingredient) <= Number(range[1])) {
                 freshCount++;
                 break;
             }
