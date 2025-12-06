@@ -14,9 +14,10 @@ fetchLines().then(lines => {
     console.log(lines);
 
     let reversedLines = [];
+    let splittedLines = [];
 
     for (let line of lines) {
-        line = line.split(/\s+/g);
+        splittedLines.push(line.split(/\s+/g));
     }
 
     for (let i = 0; i < lines.length; i++) {
