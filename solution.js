@@ -13,21 +13,21 @@ async function fetchLines() {
 fetchLines().then(lines => {
     console.log(lines);
 
-    let reversedLines = [];
-
     let splittedLines = lines.map(line =>
         line.split(/\s+/g).filter(el => el !== "")
     );
 
     console.log(splittedLines);
 
-    for (let i = 0; i < splittedLines.length; i++) {
+    /*for (let i = 0; i < splittedLines.length; i++) {
         let newRow = [];
         for (let j = 0; j < splittedLines[i].length; j++) {
             newRow.push(splittedLines[j][i]);
         }
         reversedLines.push(newRow);
-    }
+    }*/
+
+    let reversedLines = splittedLines[0].map((_, i) => splittedLines.map(row => row[i]));
 
     console.log("Reversed: ", reversedLines);
 
