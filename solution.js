@@ -20,9 +20,11 @@ fetchLines().then(lines => {
         splittedLines.push(line.split(/\s+/g));
     }
 
-    for (let i = 0; i < lines.length; i++) {
-        for (let j = 0; j < lines[i].length; j++) {
-            reversedLines.push(lines[j][i]);
+    splittedLines = splittedLines.filter(() => true);
+
+    for (let i = 0; i < splittedLines.length; i++) {
+        for (let j = 0; j < splittedLines[i].length; j++) {
+            reversedLines.push(splittedLines[j][i]);
         }
     }
 
