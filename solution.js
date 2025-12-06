@@ -35,7 +35,7 @@ fetchLines().then(lines => {
 
     for (let line of reversedLines) {
         let result = 0;
-        let sign = line[length - 1];
+        let sign = line[line.length - 1];
 
         if (sign === "*") result = 1;
         else result = 0;
