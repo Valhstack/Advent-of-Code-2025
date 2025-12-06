@@ -15,6 +15,8 @@ fetchLines().then(lines => {
 
     let reversedLines = [];
 
+    lines = lines.split(/\s*/g);
+
     for(let i = 0; i < lines.length; i++){
         for(let j = 0; j < lines[i].length; j++){
             reversedLines.push(lines[j][i]);
