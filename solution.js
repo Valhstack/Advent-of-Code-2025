@@ -14,19 +14,48 @@ fetchLines().then(lines => {
     console.log(lines);
 
     let reversedLines = [];
-    let splittedLines = [];
 
-    for (let line of lines) {
-        splittedLines.push(line.split(/\s+/g));
-    }
+    let splittedLines = lines.map(line =>
+        line.split(/\s+/g).filter(el => el !== "")
+    );
 
-    splittedLines = splittedLines.filter(() => true);
+    console.log(splittedLines);
 
     for (let i = 0; i < splittedLines.length; i++) {
+        let newRow = [];
         for (let j = 0; j < splittedLines[i].length; j++) {
-            reversedLines.push(splittedLines[j][i]);
+            newRow.push(splittedLines[j][i]);
         }
+        reversedLines.push(newRow);
     }
 
-    console.log("Reversed: ", reversedLines)
+    console.log("Reversed: ", reversedLines);
+
+    let problemAnswer = [];
+
+    for (let line of reversedLines) {
+        let result = 0;
+        let sign = line[length - 1];
+
+        if (sign === "*") result = 1;
+        else result = 0;
+
+        for (let i = 0; i < line.length - 1; i++) {
+            if (sign === "*") result *= Number(line[i]);
+            else result += Number(line[i]);
+        }
+
+        console.log(result);
+        problemAnswer.push(result);
+    }
+
+    let totalResult = 0;
+
+    console.log(problemAnswer);
+
+    for (let answer of problemAnswer) {
+        totalResult += Number(answer);
+    }
+
+    console.log("Result: ", totalResult);
 })
