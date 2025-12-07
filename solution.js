@@ -56,11 +56,10 @@ fetchLines().then(lines => {
 
     console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);*/
 
-    for(let i = 0; i < input.length; i++){
+    for(let i = 0; i < input.length; i += 2){
         for(let j = 0; j < input[i].length; j++){
             if(input[i][j] === "S"){
                 count[j] += 1;
-                i++;
                 break;
             }
             
