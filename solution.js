@@ -16,18 +16,22 @@ fetchLines().then(lines => {
     let input = [];
     let tachyonHit = 0;
 
-    let count = [];
+    let counts = [];
 
     for (let i = 0; i < lines[0].length; i++) {
-        count[i] = 0;
+        counts[i] = 0;
+
+        document.getElementById("count").innerText += counts[i];
     }
 
     for (let line of lines) {
         let newRow = [];
         for (let ch of line) {
             newRow.push(ch);
+            document.getElementById("tree").innerText += ch;
         }
 
+        document.getElementById("tree").innerText += "\n";
         input.push(newRow);
     }
 
@@ -36,7 +40,7 @@ fetchLines().then(lines => {
     for (let i = 0; i < input.length; i++) {
         for (let j = 0; j < input[i].length; j++) {
             if (input[i][j] === "S") {
-                count[j] += 1;
+                counts[j] += 1;
                 input[i + 1][j] = "|";
                 break;
             }
@@ -46,36 +50,64 @@ fetchLines().then(lines => {
                 input[i][j + 1] = "|";
                 tachyonHit++;
 
-                count[j - 1] += 1;
-                count[j + 1] += 1;
-                count[j] = 0;
+                document.getElementById("tree").innerText = "";
+
+                for (let line of lines) {
+                    for (let ch of line) {
+                        document.getElementById("tree").innerText += ch;
+                    }
+                    document.getElementById("tree").innerText += "\n";
+                }
+
+                counts[j - 1] += 1;
+                counts[j + 1] += 1;
+                counts[j] = 0;
+
+                document.getElementById("count").innerText = "";
+
+                for (let count of counts) {
+                    document.getElementById("count").innerText += count;
+                }
             }
             else if (input[i][j] === "." && i !== 0) {
                 if (input[i - 1][j] === "|") {
                     input[i][j] = "|";
+
+                    document.getElementById("tree").innerText = "";
+
+                    for (let line of lines) {
+                        for (let ch of line) {
+                            document.getElementById("tree").innerText += ch;
+                        }
+                        document.getElementById("tree").innerText += "\n";
+                    }
                 }
             }
+
+            setTimeout(() => {
+                console.log("Delayed");
+            }, 1500);
         }
     }
 
-    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);
+    console.log("With all the beams: ", input, " ; Total split counts: ", tachyonHit);
 
     /*for (let i = 0; i < input.length; i += 2) {
         for (let j = 0; j < input[i].length; j++) {
             if (input[i][j] === "S") {
-                count[j] += 1;
+                counts[j] += 1;
                 break;
             }
 
             if (input[i][j] === "^") {
-                count[j - 1] += 1;
-                count[j + 1] += 1;
-                count[j] = 0;
+                counts[j - 1] += 1;
+                counts[j + 1] += 1;
+                counts[j] = 0;
             }
         }
     }*/
 
-    let totalNumOfPath = count.reduce((accumulator, currentValue) => {
+    let totalNumOfPath = counts.reduce((accumulator, currentValue) => {
         return accumulator + currentValue
     }, 0);
 
