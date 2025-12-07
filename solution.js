@@ -16,6 +16,12 @@ fetchLines().then(lines => {
     let input = [];
     let tachyonHit = 0;
 
+    let count = [];
+
+    for(let i = 0; i < lines[0].length; i++){
+        count[i] = 0;
+    }
+
     for (let line of lines) {
         let newRow = [];
         for (let ch of line) {
@@ -27,7 +33,7 @@ fetchLines().then(lines => {
 
     console.log("Parsed by character input: ", input);
 
-    for (let i = 0; i < input.length; i++) {
+    /*for (let i = 0; i < input.length; i++) {
         for (let j = 0; j < input[i].length; j++) {
             if (input[i][j] === "S") {
                 i++;
@@ -48,22 +54,27 @@ fetchLines().then(lines => {
         }
     }
 
-    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);
+    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);*/
 
-    // Convert array to a string (e.g., one item per line)
-    const text = input.join("\n");
+    for(let i = 0; i < input.length; i++){
+        for(let j = 0; j < input[i].length; j++){
+            if(input[i][j] === "S"){
+                count[j] += 1;
+                i++;
+                break;
+            }
+            
+            if(input[i][j] !== "."){
+                count[j - 1] += 1;
+                count[j + 1] += 1;
+                count[j] = 0;
+            }
+        }
+    }
+    
+    let totalNumOfPath = count.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue
+    }, 0);
 
-    // Create a Blob
-    const blob = new Blob([text], { type: "text/plain" });
-
-    // Create a temporary download link
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "myArray.txt";
-
-    // Trigger download
-    link.click();
-
-    // Cleanup
-    URL.revokeObjectURL(link.href);
+    console.log("Total number of path: ", totalNumOfPath);
 })
