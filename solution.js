@@ -67,12 +67,15 @@ fetchLines().then(lines => {
     for (let line of lines) {
         let newRow = [];
         for (let i = 0; i < line.length; i++) {
-            if (line[i] === "*" || line[i] === "+") {
+            /*if (line[i] === "*" || line[i] === "+") {
                 signs.push(line[i]);
             }
             else {
                 newRow.push(line[i]);
-            }
+            }*/
+
+            newRow.push(line[i]);
+
         }
 
         newArr.push(newRow)
@@ -107,7 +110,9 @@ fetchLines().then(lines => {
 
     let problemAnswer = [];
 
-    for (let i = 0; i < signs.length; i++) {
+    // somewhere lost some rows - gotta re-check the logic tomorrow
+
+    /*for (let i = 0; i < signs.length; i++) {
         let tempResult = 0;
 
         if (signs[i] === "*") tempResult = 1;
@@ -128,5 +133,5 @@ fetchLines().then(lines => {
         totalResult += Number(answer);
     }
 
-    console.log("Total Result: ", totalResult);
+    console.log("Total Result: ", totalResult);*/
 })
