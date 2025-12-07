@@ -113,7 +113,7 @@ fetchLines().then(lines => {
         if (signs[i] === "*") tempResult = 1;
         else tempResult = 0;
 
-        for (let j = 0; j < result[i].length - 1; j++) {
+        for (let j = 0; j < result[i].length; j++) {
             if (signs[i] === "*") tempResult *= Number(result[i][j]);
             else tempResult += Number(result[i][j]);
         }
