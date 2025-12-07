@@ -14,6 +14,7 @@ fetchLines().then(lines => {
     console.log("Initial input: ", lines, "Total length: ", lines.length, "One row length: ", lines[0].length);
 
     let input = [];
+    let tachyonHit = 0;
 
     for(let line of lines){
         let newRow = [];
@@ -34,11 +35,12 @@ fetchLines().then(lines => {
                 break;
             }
 
-            if(input[i][j] === "^"){
+            if(input[i][j] === "^" && input[i - 1][j] === "|"){
                 input[i][j - 1] = "|";
                 input[i][j + 1] = "|";
+                tachyonHit++;
             }
-            else if(input[i][j] === "."){
+            else if(input[i][j] === "." && i !== 0){
                 if(input[i - 1][j] === "|"){
                     input[i][j] = "|";
                 }
@@ -46,5 +48,5 @@ fetchLines().then(lines => {
         }
     }
 
-        console.log("First beam should be in: ", input);
+    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);
 })
