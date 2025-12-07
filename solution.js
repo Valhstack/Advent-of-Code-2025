@@ -42,6 +42,24 @@ fetchLines().then(lines => {
             if (input[i][j] === "S") {
                 counts[j] += 1;
                 input[i + 1][j] = "|";
+
+                document.getElementById("tree").innerText = "";
+
+                for (let line of lines) {
+                    for (let ch of line) {
+                        document.getElementById("tree").innerText += ch;
+                    }
+                    document.getElementById("tree").innerText += "\n";
+                }
+
+                document.getElementById("count").innerText = "";
+
+                for (let count of counts) {
+                    document.getElementById("count").innerText += count;
+                }
+
+                i++;
+
                 break;
             }
 
@@ -83,10 +101,6 @@ fetchLines().then(lines => {
                     }
                 }
             }
-
-            setTimeout(() => {
-                console.log("Delayed");
-            }, 1500);
         }
     }
 
