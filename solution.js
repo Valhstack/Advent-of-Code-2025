@@ -18,7 +18,7 @@ fetchLines().then(lines => {
 
     let count = [];
 
-    for(let i = 0; i < lines[0].length; i++){
+    for (let i = 0; i < lines[0].length; i++) {
         count[i] = 0;
     }
 
@@ -33,11 +33,11 @@ fetchLines().then(lines => {
 
     console.log("Parsed by character input: ", input);
 
-    /*for (let i = 0; i < input.length; i++) {
+    for (let i = 0; i < input.length; i++) {
         for (let j = 0; j < input[i].length; j++) {
             if (input[i][j] === "S") {
-                i++;
-                input[i][j] = "|";
+                count[j] += 1;
+                input[i + 1][j] = "|";
                 break;
             }
 
@@ -45,6 +45,10 @@ fetchLines().then(lines => {
                 input[i][j - 1] = "|";
                 input[i][j + 1] = "|";
                 tachyonHit++;
+
+                count[j - 1] += 1;
+                count[j + 1] += 1;
+                count[j] = 0;
             }
             else if (input[i][j] === "." && i !== 0) {
                 if (input[i - 1][j] === "|") {
@@ -54,23 +58,23 @@ fetchLines().then(lines => {
         }
     }
 
-    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);*/
+    console.log("With all the beams: ", input, " ; Total split count: ", tachyonHit);
 
-    for(let i = 0; i < input.length; i += 2){
-        for(let j = 0; j < input[i].length; j++){
-            if(input[i][j] === "S"){
+    /*for (let i = 0; i < input.length; i += 2) {
+        for (let j = 0; j < input[i].length; j++) {
+            if (input[i][j] === "S") {
                 count[j] += 1;
                 break;
             }
-            
-            if(input[i][j] !== "."){
+
+            if (input[i][j] === "^") {
                 count[j - 1] += 1;
                 count[j + 1] += 1;
                 count[j] = 0;
             }
         }
-    }
-    
+    }*/
+
     let totalNumOfPath = count.reduce((accumulator, currentValue) => {
         return accumulator + currentValue
     }, 0);
