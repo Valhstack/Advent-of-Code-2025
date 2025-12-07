@@ -11,7 +11,7 @@ async function fetchLines() {
 }
 
 fetchLines().then(lines => {
-    console.log(lines);
+    console.log("Initial input: ", lines, "Total length: ", lines.length, "One row length: ", lines[0].length);
 
     // PART 1 solution for reversing array
 
@@ -67,15 +67,12 @@ fetchLines().then(lines => {
     for (let line of lines) {
         let newRow = [];
         for (let i = 0; i < line.length; i++) {
-            /*if (line[i] === "*" || line[i] === "+") {
+            if (line[i] === "*" || line[i] === "+") {
                 signs.push(line[i]);
             }
             else {
                 newRow.push(line[i]);
-            }*/
-
-            newRow.push(line[i]);
-
+            }
         }
 
         newArr.push(newRow)
@@ -97,22 +94,35 @@ fetchLines().then(lines => {
 
     console.log("newArr2:", newArr2);
 
-    const numbers = newArr2
-        .map(row => Number(row.join('').replace(/\D/g, '')))
-        .filter(n => n !== 0);
-
     const result = [];
-    for (let i = 0; i < numbers.length; i += 3) {
-        result.push(numbers.slice(i, i + 3));
+    let currentGroup = [];
+
+    for (const row of newArr2) {
+        // Check if row is blank (all spaces or empty)
+        const isBlank = row.every(x => x.trim() === "");
+
+        if (isBlank) {
+            // end current group if it has content
+            if (currentGroup.length > 0) {
+                result.push(currentGroup);
+                currentGroup = [];
+            }
+            continue;
+        }
+
+        // join the row into a number
+        const num = Number(row.join("").trim());
+        currentGroup.push(num);
     }
 
-    console.log("Result: ", result);
+    // push last group if exists
+    if (currentGroup.length > 0) {
+        result.push(currentGroup);
+    }
 
     let problemAnswer = [];
 
-    // somewhere lost some rows - gotta re-check the logic tomorrow
-
-    /*for (let i = 0; i < signs.length; i++) {
+    for (let i = 0; i < signs.length; i++) {
         let tempResult = 0;
 
         if (signs[i] === "*") tempResult = 1;
@@ -133,5 +143,5 @@ fetchLines().then(lines => {
         totalResult += Number(answer);
     }
 
-    console.log("Total Result: ", totalResult);*/
+    console.log("Total Result: ", totalResult);
 })
