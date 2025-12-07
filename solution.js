@@ -1,84 +1,90 @@
-async function fetchInput() {
-    return await (await fetch("input.txt")).text();
-}
-
 async function fetchLines() {
     const response = await fetch("input.txt");
     const text = await response.text();
-    const lines = text.split(/\r?\n/);
-
-    return lines;
+    return text.split(/\r?\n/);
 }
 
-fetchLines().then(lines => {
-    console.log("Initial input: ", lines, "Total length: ", lines.length, "One row length: ", lines[0].length);
+// Delay helper
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Render the grid with a highlight
+async function renderGrid(input, highlightRow, highlightCol) {
+    const tree = document.getElementById("tree");
+    tree.innerHTML = "";
+
+    for (let row = 0; row < input.length; row++) {
+        for (let col = 0; col < input[row].length; col++) {
+
+            if (row === highlightRow && col === highlightCol) {
+                tree.innerHTML += `<span class="highlight">${input[row][col]}</span>`;
+            } else {
+                tree.innerHTML += `<span>${input[row][col]}</span>`;
+            }
+        }
+        tree.innerHTML += "<br>";
+    }
+
+    await delay(40); // SPEED HERE
+}
+
+// Render the counts
+async function renderCounts(counts, highlightIndex) {
+    const countDiv = document.getElementById("count");
+    countDiv.innerHTML = "";
+
+    for (let i = 0; i < counts.length; i++) {
+        if (i === highlightIndex) {
+            countDiv.innerHTML += `<span class="highlight">${counts[i]}</span>`;
+        } else {
+            countDiv.innerHTML += `<span>${counts[i]}</span>`;
+        }
+    }
+
+    await delay(40);
+}
+
+// Main animation
+(async function run() {
+    const lines = await fetchLines();
+
+    console.log("Initial input: ", lines, "Total length:", lines.length, "One row length:", lines[0].length);
 
     let input = [];
     let tachyonHit = 0;
-
     let counts = [];
 
+    // Initialize counts
     for (let i = 0; i < lines[0].length; i++) {
         counts[i] = 0;
-
-        document.getElementById("count").innerText += counts[i];
     }
 
+    // Convert lines into char grid array
     for (let line of lines) {
-        let newRow = [];
-        for (let ch of line) {
-            newRow.push(ch);
-            document.getElementById("tree").innerText += ch;
-        }
-
-        document.getElementById("tree").innerText += "\n";
-        input.push(newRow);
+        input.push(line.split(""));
     }
 
-    console.log("Parsed by character input: ", input);
+    console.log("Parsed char input: ", input);
 
+    // Start simulation
     for (let i = 0; i < input.length; i++) {
         for (let j = 0; j < input[i].length; j++) {
+
+            // ---- Case S ----
             if (input[i][j] === "S") {
                 counts[j] += 1;
                 input[i + 1][j] = "|";
 
-                document.getElementById("tree").innerHTML = "";
+                await renderGrid(input, i, j);
+                await renderCounts(counts, j);
 
-                for (let row = 0; row < input.length; row++) {
-                    for (let col = 0; col < input[row].length; col++) {
-
-                        // highlight the target cell
-                        if (row === i && col === j) {
-                            document.getElementById("tree").innerHTML +=
-                                `<span class="highlight">${input[row][col]}</span>`;
-                        } else {
-                            document.getElementById("tree").innerHTML +=
-                                `<span>${input[row][col]}</span>`;
-                        }
-                    }
-                    document.getElementById("tree").innerHTML += "<br>";
-                }
-
-                document.getElementById("count").innerHTML = "";
-
-                for (let index = 0; index < counts.length; index++) {
-                    if (index === j) {
-                        // highlight the changed count
-                        document.getElementById("count").innerHTML +=
-                            `<span class="highlight">${counts[index]}</span>`;
-                    } else {
-                        document.getElementById("count").innerHTML +=
-                            `<span>${counts[index]}</span>`;
-                    }
-                }
-
-                i++;
-
+                i++; // skip one row
                 break;
             }
 
-            if (input[i][j] === "^" && input[i - 1][j] === "|") {
+            // ---- Case ^ with | above -> split ----
+            if (input[i][j] === "^" && input[i - 1]?.[j] === "|") {
                 input[i][j - 1] = "|";
                 input[i][j + 1] = "|";
                 tachyonHit++;
@@ -87,81 +93,24 @@ fetchLines().then(lines => {
                 counts[j + 1] += 1;
                 counts[j] = 0;
 
-                document.getElementById("tree").innerHTML = "";
-
-                for (let row = 0; row < input.length; row++) {
-                    for (let col = 0; col < input[row].length; col++) {
-
-                        // highlight the target cell
-                        if (row === i && col === j) {
-                            document.getElementById("tree").innerHTML +=
-                                `<span class="highlight">${input[row][col]}</span>`;
-                        } else {
-                            document.getElementById("tree").innerHTML +=
-                                `<span>${input[row][col]}</span>`;
-                        }
-                    }
-                    document.getElementById("tree").innerHTML += "<br>";
-                }
-
-                document.getElementById("count").innerHTML = "";
-
-                for (let index = 0; index < counts.length; index++) {
-                    if (index === j) {
-                        // highlight the changed count
-                        document.getElementById("count").innerHTML +=
-                            `<span class="highlight">${counts[index]}</span>`;
-                    } else {
-                        document.getElementById("count").innerHTML +=
-                            `<span>${counts[index]}</span>`;
-                    }
-                }
+                await renderGrid(input, i, j);
+                await renderCounts(counts, j);
             }
+
+            // ---- Case . but a beam is above -> extend ----
             else if (input[i][j] === "." && i !== 0) {
                 if (input[i - 1][j] === "|") {
                     input[i][j] = "|";
 
-                    document.getElementById("tree").innerHTML = "";
-
-                    for (let row = 0; row < input.length; row++) {
-                        for (let col = 0; col < input[row].length; col++) {
-
-                            // highlight the target cell
-                            if (row === i && col === j) {
-                                document.getElementById("tree").innerHTML +=
-                                    `<span class="highlight">${input[row][col]}</span>`;
-                            } else {
-                                document.getElementById("tree").innerHTML +=
-                                    `<span>${input[row][col]}</span>`;
-                            }
-                        }
-                        document.getElementById("tree").innerHTML += "<br>";
-                    }
+                    await renderGrid(input, i, j);
                 }
             }
         }
     }
 
-    console.log("With all the beams: ", input, " ; Total split counts: ", tachyonHit);
+    console.log("Final beams: ", input, "Total splits: ", tachyonHit);
 
-    /*for (let i = 0; i < input.length; i += 2) {
-        for (let j = 0; j < input[i].length; j++) {
-            if (input[i][j] === "S") {
-                counts[j] += 1;
-                break;
-            }
-
-            if (input[i][j] === "^") {
-                counts[j - 1] += 1;
-                counts[j + 1] += 1;
-                counts[j] = 0;
-            }
-        }
-    }*/
-
-    let totalNumOfPath = counts.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue
-    }, 0);
-
-    console.log("Total number of path: ", totalNumOfPath);
-})
+    // Sum all paths
+    let totalNumOfPath = counts.reduce((a, b) => a + b, 0);
+    console.log("Total number of paths: ", totalNumOfPath);
+})();
