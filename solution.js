@@ -9,40 +9,42 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Render the grid with a highlight
+// Render the grid with highlight efficiently
 async function renderGrid(input, highlightRow, highlightCol) {
     const tree = document.getElementById("tree");
-    tree.innerHTML = "";
+    let html = "";
 
     for (let row = 0; row < input.length; row++) {
         for (let col = 0; col < input[row].length; col++) {
-
             if (row === highlightRow && col === highlightCol) {
-                tree.innerHTML += `<span class="highlight">${input[row][col]}</span>`;
+                html += `<span class="highlight">${input[row][col]}</span>`;
             } else {
-                tree.innerHTML += `<span>${input[row][col]}</span>`;
+                html += `<span>${input[row][col]}</span>`;
             }
         }
-        tree.innerHTML += "<br>";
+        html += "<br>";
     }
 
-    await delay(700); // SPEED HERE
+    tree.innerHTML = html;
+    await delay(50); // Reduced delay for smoother animation
 }
 
-// Render the counts
+// Render counts efficiently
 async function renderCounts(counts, highlightIndex) {
     const countDiv = document.getElementById("count");
-    countDiv.innerHTML = "";
+    let html = "";
 
     for (let i = 0; i < counts.length; i++) {
         if (i === highlightIndex) {
-            countDiv.innerHTML += `<span class="highlight">${counts[i]}</span>`;
+            html += `<span class="highlight">${counts[i]}</span>`;
         } else {
-            countDiv.innerHTML += `<span>${counts[i]}</span>`;
+            html += `<span>${counts[i]}</span>`;
         }
+        html += " "; // optional spacing between numbers
     }
 
-    await delay(40);
+    countDiv.innerHTML = html;
+    await delay(50);
 }
 
 // Main animation
@@ -85,12 +87,13 @@ async function renderCounts(counts, highlightIndex) {
 
             // ---- Case ^ with | above -> split ----
             if (input[i][j] === "^" && input[i - 1]?.[j] === "|") {
+                let incoming = counts[j];
                 input[i][j - 1] = "|";
                 input[i][j + 1] = "|";
                 tachyonHit++;
 
-                counts[j - 1] += 1;
-                counts[j + 1] += 1;
+                counts[j - 1] += incoming;
+                counts[j + 1] += incoming;
                 counts[j] = 0;
 
                 await renderGrid(input, i, j);
@@ -113,4 +116,6 @@ async function renderCounts(counts, highlightIndex) {
     // Sum all paths
     let totalNumOfPath = counts.reduce((a, b) => a + b, 0);
     console.log("Total number of paths: ", totalNumOfPath);
+
+    document.getElementById("result").innerText = totalNumOfPath;
 })();
