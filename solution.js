@@ -43,19 +43,34 @@ fetchLines().then(lines => {
                 counts[j] += 1;
                 input[i + 1][j] = "|";
 
-                document.getElementById("tree").innerText = "";
+                document.getElementById("tree").innerHTML = "";
 
-                for (let line of lines) {
-                    for (let ch of line) {
-                        document.getElementById("tree").innerText += ch;
+                for (let row = 0; row < input.length; row++) {
+                    for (let col = 0; col < input[row].length; col++) {
+
+                        // highlight the target cell
+                        if (row === i && col === j) {
+                            document.getElementById("tree").innerHTML +=
+                                `<span class="highlight">${input[row][col]}</span>`;
+                        } else {
+                            document.getElementById("tree").innerHTML +=
+                                `<span>${input[row][col]}</span>`;
+                        }
                     }
-                    document.getElementById("tree").innerText += "\n";
+                    document.getElementById("tree").innerHTML += "<br>";
                 }
 
-                document.getElementById("count").innerText = "";
+                document.getElementById("count").innerHTML = "";
 
-                for (let count of counts) {
-                    document.getElementById("count").innerText += count;
+                for (let index = 0; index < counts.length; index++) {
+                    if (index === j) {
+                        // highlight the changed count
+                        document.getElementById("count").innerHTML +=
+                            `<span class="highlight">${counts[index]}</span>`;
+                    } else {
+                        document.getElementById("count").innerHTML +=
+                            `<span>${counts[index]}</span>`;
+                    }
                 }
 
                 i++;
@@ -68,36 +83,59 @@ fetchLines().then(lines => {
                 input[i][j + 1] = "|";
                 tachyonHit++;
 
-                document.getElementById("tree").innerText = "";
-
-                for (let line of lines) {
-                    for (let ch of line) {
-                        document.getElementById("tree").innerText += ch;
-                    }
-                    document.getElementById("tree").innerText += "\n";
-                }
-
                 counts[j - 1] += 1;
                 counts[j + 1] += 1;
                 counts[j] = 0;
 
-                document.getElementById("count").innerText = "";
+                document.getElementById("tree").innerHTML = "";
 
-                for (let count of counts) {
-                    document.getElementById("count").innerText += count;
+                for (let row = 0; row < input.length; row++) {
+                    for (let col = 0; col < input[row].length; col++) {
+
+                        // highlight the target cell
+                        if (row === i && col === j) {
+                            document.getElementById("tree").innerHTML +=
+                                `<span class="highlight">${input[row][col]}</span>`;
+                        } else {
+                            document.getElementById("tree").innerHTML +=
+                                `<span>${input[row][col]}</span>`;
+                        }
+                    }
+                    document.getElementById("tree").innerHTML += "<br>";
+                }
+
+                document.getElementById("count").innerHTML = "";
+
+                for (let index = 0; index < counts.length; index++) {
+                    if (index === j) {
+                        // highlight the changed count
+                        document.getElementById("count").innerHTML +=
+                            `<span class="highlight">${counts[index]}</span>`;
+                    } else {
+                        document.getElementById("count").innerHTML +=
+                            `<span>${counts[index]}</span>`;
+                    }
                 }
             }
             else if (input[i][j] === "." && i !== 0) {
                 if (input[i - 1][j] === "|") {
                     input[i][j] = "|";
 
-                    document.getElementById("tree").innerText = "";
+                    document.getElementById("tree").innerHTML = "";
 
-                    for (let line of lines) {
-                        for (let ch of line) {
-                            document.getElementById("tree").innerText += ch;
+                    for (let row = 0; row < input.length; row++) {
+                        for (let col = 0; col < input[row].length; col++) {
+
+                            // highlight the target cell
+                            if (row === i && col === j) {
+                                document.getElementById("tree").innerHTML +=
+                                    `<span class="highlight">${input[row][col]}</span>`;
+                            } else {
+                                document.getElementById("tree").innerHTML +=
+                                    `<span>${input[row][col]}</span>`;
+                            }
                         }
-                        document.getElementById("tree").innerText += "\n";
+                        document.getElementById("tree").innerHTML += "<br>";
                     }
                 }
             }

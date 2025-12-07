@@ -8,3 +8,7 @@
     -moz-osx-font-smoothing: grayscale;
     font-family: "IBM Plex Mono";
 }
+
+.highlight{
+    background-color: #cccccc66;
+}
