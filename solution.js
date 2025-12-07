@@ -26,7 +26,7 @@ async function renderGrid(input, highlightRow, highlightCol) {
         tree.innerHTML += "<br>";
     }
 
-    await delay(40); // SPEED HERE
+    await delay(300); // SPEED HERE
 }
 
 // Render the counts
