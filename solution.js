@@ -22,55 +22,6 @@ function Area(area, point1, point2) {
     this.point2 = point2;
 }
 
-// -------------------- Helper: Check if point is on line segment --------------------
-function isPointOnLine(point, a, b, epsilon = 1e-10) {
-    const cross = (b.X - a.X) * (point.Y - a.Y) - (b.Y - a.Y) * (point.X - a.X);
-    if (Math.abs(cross) > epsilon) return false;
-
-    const dot = (point.X - a.X) * (b.X - a.X) + (point.Y - a.Y) * (b.Y - a.Y);
-    if (dot < 0) return false;
-
-    const lenSq = (b.X - a.X) ** 2 + (b.Y - a.Y) ** 2;
-    if (dot > lenSq) return false;
-
-    return true;
-}
-
-// -------------------- Point inside polygon OR on edge --------------------
-function isPointInPolygonOrOnEdge(point, polygon) {
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        if (isPointOnLine(point, polygon[j], polygon[i])) return true;
-    }
-
-    // Ray-casting algorithm
-    let x = point.X, y = point.Y;
-    let inside = false;
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        let xi = polygon[i].X, yi = polygon[i].Y;
-        let xj = polygon[j].X, yj = polygon[j].Y;
-        let intersect = ((yi > y) !== (yj > y)) &&
-            (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-        if (intersect) inside = !inside;
-    }
-    return inside;
-}
-
-// -------------------- Rectangle from 2 edge points --------------------
-function getRectangleCorners(p1, p2) {
-    return [
-        { X: p1.X, Y: p1.Y },
-        { X: p2.X, Y: p1.Y },
-        { X: p1.X, Y: p2.Y },
-        { X: p2.X, Y: p2.Y }
-    ];
-}
-
-// -------------------- Check if rectangle is fully inside polygon --------------------
-function isRectangleInsidePolygon(p1, p2, polygon) {
-    const corners = getRectangleCorners(p1, p2);
-    return corners.every(corner => isPointInPolygonOrOnEdge(corner, polygon));
-}
-
 fetchLines().then(lines => {
     console.log("Initial input: ", lines, "Total length: ", lines.length, "One row length: ", lines[0].length);
 
@@ -128,18 +79,109 @@ fetchLines().then(lines => {
         }
     }
 
+    // --- Helper functions ---
+
+    function parseCoord(value) {
+        const num = parseFloat(value);
+        if (isNaN(num)) throw new Error(`Invalid coordinate value: ${value}`);
+        return num;
+    }
+
+    function closeRing(coords) {
+        if (!coords || coords.length < 3) throw new Error("Need at least 3 points to form a polygon");
+        const first = coords[0];
+        const last = coords[coords.length - 1];
+        if (first[0] !== last[0] || first[1] !== last[1]) {
+            coords.push([...first]); // close the ring
+        }
+        return coords;
+    }
+
+    function makeRectangle(p1, p2) {
+        const x1 = parseCoord(p1.X);
+        const y1 = parseCoord(p1.Y);
+        const x2 = parseCoord(p2.X);
+        const y2 = parseCoord(p2.Y);
+
+        const coords = [
+            [x1, y1],
+            [x2, y1],
+            [x2, y2],
+            [x1, y2],
+            [x1, y1] // close the ring
+        ];
+
+        return turf.polygon([coords]);
+    }
+
+    // --- MAIN POLYGON ---
+    if (!pointsSorted || pointsSorted.length < 3) {
+        throw new Error("pointsSorted is missing or has fewer than 3 points");
+    }
+
+    const mainCoords = closeRing(pointsSorted.map(p => [parseCoord(p.X), parseCoord(p.Y)]));
+    const polygon = turf.polygon([mainCoords]);
+
+    let rectanglesInPolygon = [];
+
     const areasSorted = areas.sort((a, b) => b.area - a.area);
 
     console.log("All areas sorted: ", areasSorted);
 
-    let maxArea = "";
+    let maxArea = "", pointIndx1, pointIndx2;
 
-    for(let area of areasSorted){
-        if(isRectangleInsidePolygon(area.point1, area.point2, pointsSorted)){
-            maxArea = area.area;
-            break;
+    // --- LOOP FOR RECTANGLES ---
+    for (let area of areasSorted) {
+        const rectangle = makeRectangle(area.point1, area.point2);
+
+        if (turf.booleanContains(polygon, rectangle)) {
+            rectanglesInPolygon.push(area);
         }
     }
 
-    console.log("Biggest area now: ", maxArea);
+    console.log("All rectangles in polygon: ", rectanglesInPolygon);
+
+    //console.log("Biggest area now: ", maxArea, "; point 1 index: ", pointIndx1, "; point 2 index", pointIndx2);
+
+    // --- Canvas setup ---
+    const canvas = document.getElementById('canvas');
+    if (!canvas) throw new Error("Canvas element not found!");
+    const ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error("Unable to get 2D context from canvas");
+
+    // --- Helper functions ---
+    function toCanvasCoords([x, y], scale = 50, offsetX = 50, offsetY = 50) {
+        return [(x + 1) * scale + offsetX, (y + 1) * scale + offsetY];
+    }
+
+    function drawPolygonOnCanvas(polygon, fillColor = 'rgba(0,128,255,0.3)', strokeColor = 'blue') {
+        const coords = polygon.geometry.coordinates[0];
+        ctx.beginPath();
+        coords.forEach((coord, i) => {
+            const [cx, cy] = toCanvasCoords(coord);
+            if (i === 0) ctx.moveTo(cx, cy);
+            else ctx.lineTo(cx, cy);
+        });
+        ctx.fillStyle = fillColor;
+        ctx.fill();
+        ctx.strokeStyle = strokeColor;
+        ctx.stroke();
+    }
+
+    // --- Delay helper ---
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    // --- Draw main polygon ---
+    drawPolygonOnCanvas(polygon, 'rgba(0,128,255,0.3)', 'blue');
+    (async () => {
+        for (let area of areasSorted) {
+            const rectangle = makeRectangle(area.point1, area.point2);
+            if (turf.booleanContains(polygon, rectangle)) {
+                rectanglesInPolygon.push(area);
+                drawPolygonOnCanvas(rectangle, 'rgba(255,128,0,0.3)', 'orange');
+                await sleep(200); // 200ms delay
+            }
+        }
+    })();
 })
