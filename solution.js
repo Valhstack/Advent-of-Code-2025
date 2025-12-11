@@ -190,13 +190,25 @@ fetchLines().then(lines => {
                 }
 
                 // compute next
+                let skipState = false;
                 let nextArray = new Array(stateArray.length);
+
                 for (let j = 0; j < buttonMask.length; j++) {
-                    // coerce to numbers safely
                     let a = Number(stateArray[j]) || 0;
                     let b = Number(buttonMask[j]) || 0;
-                    nextArray[j] = a + b;
+
+                    let value = a + b;
+
+                    // Prune if value exceeds target
+                    if (value > targetArray[j]) {
+                        skipState = true;
+                        break;  // we stop building this nextArray entirely
+                    }
+
+                    nextArray[j] = value;
                 }
+
+                if (skipState) continue;  // skip this button result
 
                 let nextID = nextArray.join(",");
 
